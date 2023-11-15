@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assistente de Atendimento - CEDI M</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50; /* Cor do Texto Principal (títulos) */
+      margin-top: 20px;
+    }
+
+    form {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 80%;
+      max-width: 600px;
+      margin-top: 20px;
+    }
+
+    label {
+      margin-bottom: 8px;
+      display: block;
+      color: #fff; /* Cor do Texto nas Labels */
+    }
+
+    select, button {
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #348c98; /* Cor do Botão (normal) */
+      color: #fff; /* Cor do Texto Principal (títulos) */
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1e6379; /* Cor do Botão (hover) */
+    }
+
+    #medicosInfo,
+    #mensagemDados,
+    #tipoPagamentoInfo,
+    #tipoConvenioInfo,
+    #autorizacaoUnimed {
+      text-align: left;
+      margin-top: 8px;
+    }
+
+    #valorProcedimento {
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: auto;
+      text-align: center;
+      background-color: #00284c; /* Cor de Fundo das Categorias */
+      padding: 10px;
+      color: #fff; /* Cor do Texto Principal (títulos) */
+      width: 100%;
+    }
+
+    footer a {
+      color: #fff;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Assistente de Atendimento - CEDI M</h1>
+
+  <form id="exameForm">
+    <label for="tipoPagamento">Selecione a forma de pagamento:</label>
+    <select id="tipoPagamento" name="tipoPagamento" onchange="exibirTipoPagamentoInfo()">
+      <option value="selecione" selected disabled>Selecione</option>
+      <option value="convenio">Convênio</option>
+      <option value="particular">Particular</option>
+    </select>
+
+    <div id="tipoConvenioInfo">
+      <!-- Informações sobre o tipo de convênio serão adicionadas dinamicamente aqui -->
+    </div>
+
+    <label for="ultrassomTipo">Selecione o tipo de Ultrassom:</label>
+    <select id="ultrassomTipo" name="ultrassomTipo" onchange="exibirMedicosInfo()">
+      <option value="selecione" selected disabled>Selecione</option>
+      <option value="com-dlopper">Com Dlopper</option>
+      <option value="sem-dlopper">Sem Dlopper</option>
+    </select>
+
+    <div id="medicosInfo">
+      <!-- Os médicos serão adicionados dinamicamente aqui -->
+    </div>
+
+    <div id="mensagemDados">
+      <!-- Mensagem sobre os dados pessoais -->
+    </div>
+
+    <div id="tipoPagamentoInfo">
+      <!-- As informações de pagamento serão adicionadas dinamicamente aqui -->
+    </div>
+
+    <div id="autorizacaoUnimed">
+      <!-- Informações sobre a autorização Unimed serão adicionadas dinamicamente aqui -->
+    </div>
+
+    <button type="button" onclick="exibirMensagem()">Continue</button>
+  </form>
+
+  <footer>
+    <p>Conteúdo clicável em baixo | <a href="#">Link 1</a> | <a href="#">Link 2</a></p>
+  </footer>
+
+  <script>
+    function exibirTipoPagamentoInfo() {
+      var tipoPagamento = document.getElementById("tipoPagamento").value;
+      var tipoConvenioInfo = document.getElementById("tipoConvenioInfo");
+
+      // Limpa o conteúdo atual
+      tipoConvenioInfo.innerHTML = "";
+
+      if (tipoPagamento === "convenio") {
+        adicionarTipoConvenioInfo();
+      }
+    }
+
+    function adicionarTipoConvenioInfo() {
+      var tipoConvenioInfo = document.getElementById("tipoConvenioInfo");
+
+      var paragrafo = document.createElement("p");
+      paragrafo.textContent = "Selecione o tipo de convênio:";
+      tipoConvenioInfo.appendChild(paragrafo);
+
+      var selectTipoConvenio = document.createElement("select");
+      selectTipoConvenio.id = "tipoConvenio";
+      selectTipoConvenio.name = "tipoConvenio";
+      selectTipoConvenio.innerHTML = '<option value="selecione" selected disabled>Selecione</option>' +
+                                    '<option value="bradesco">Bradesco</option>' +
+                                    '<option value="amil">Amil</option>' +
+                                    '<option value="unimed">Unimed</option>';
+      tipoConvenioInfo.appendChild(selectTipoConvenio);
+    }
+
+    function exibirMedicosInfo() {
+      var tipoPagamento = document.getElementById("tipoPagamento").value;
+      var tipoConvenio = document.getElementById("tipoConvenio");
+      var tipoUltrassom = document.getElementById("ultrassomTipo").value;
+      var medicosInfo = document.getElementById("medicosInfo");
+
+      var medicosComDlopper = ["Matheus", "Mayara", "Rafaella"];
+      var medicosSemDlopper = ["Sara", "Leidiane"];
+
+      // Limpa o conteúdo atual
+      medicosInfo.innerHTML = "";
+
+      if (tipoPagamento === "convenio" && tipoConvenio.value === "unimed" && tipoUltrassom === "com-dlopper") {
+        // Se o convênio for Unimed e o tipo de ultrassom for com Dlopper, remover o médico Matheus
+        medicosComDlopper = medicosComDlopper.filter(function(medico) {
+          return medico !== "Matheus";
+        });
+      }
+
+      if (tipoUltrassom === "com-dlopper") {
+        adicionarMedicosAoInfo(medicosComDlopper, "Verifique a disponibilidade na agenda de cada um.");
+      } else if (tipoUltrassom === "sem-dlopper") {
+        adicionarMedicosAoInfo(medicosSemDlopper, "Verifique a disponibilidade na agenda de cada um.");
+      }
+    }
+
+    function adicionarMedicosAoInfo(medicos, mensagemAdicional) {
+      var medicosInfo = document.getElementById("medicosInfo");
+
+      var paragrafo = document.createElement("p");
+      paragrafo.textContent = "Os médicos disponíveis são: " + medicos.join(", ") + ". " + mensagemAdicional;
+      medicosInfo.appendChild(paragrafo);
+    }
+
+    function exibirMensagem() {
+      var tipoPagamento = document.getElementById("tipoPagamento").value;
+      var autorizacaoUnimed = document.getElementById("autorizacaoUnimed");
+
+      // Limpa o conteúdo atual
+      autorizacaoUnimed.innerHTML = "";
+
+      if (tipoPagamento === "convenio") {
+        var convenioSelecionado = document.getElementById("convenio").value;
+
+        if (convenioSelecionado !== "unimed") {
+          autorizacaoUnimed.innerHTML = "<p>Por favor, imprima o pedido e entregue ao Ruan para que seja autorizado.</p>";
+        }
+      }
+    }
+  </script>
+</body>
+</html>
